@@ -12,7 +12,7 @@ public class Orders {
         Scanner sc = new Scanner (System.in);
         String response;
         do{
-        
+   
         System.out.println("\n---------------------");
         System.out.println("ORDER PANEL");
         System.out.println("1. ADD ORDER");
@@ -91,7 +91,11 @@ public class Orders {
         System.out.print("Enter Quatity: ");
         double quantity = sc.nextDouble();
         
-        
+        while (conf.getSingleValue("SELECT o_quantity FROM tbl_order WHERE o_quantity=?", quantity) == 0) {
+            System.out.println("Your out of the limit");
+            System.out.print("Enter Order Quantity Again: ");
+            quantity = sc.nextInt();
+        }
         String priceqry = "SELECT m_price FROM tbl_motorcycle WHERE m_id=?";
         double price = conf.getSingleValue(priceqry, mid);
         double due = price * quantity;
@@ -143,7 +147,7 @@ private void updateOrder() {
         // Check if the order exists
         while (conf.getSingleValue("SELECT o_id FROM tbl_order WHERE o_id=?", orderId) == 0) {
             System.out.println("SELECTED ID doesn't exist!");
-            System.out.println("Enter Order ID Again");
+            System.out.print("Enter Order ID Again: ");
             orderId = sc.nextInt();
         }
 
