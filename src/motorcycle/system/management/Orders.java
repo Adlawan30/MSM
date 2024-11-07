@@ -40,7 +40,7 @@ public class Orders {
                 break;
             case 4:
                 od.viewOrders();
-
+                od.deleteOrder();
                 od.viewOrders();
                 break;
             case 5:
@@ -134,13 +134,47 @@ public class Orders {
     
              
     }
-    private void updateOrder() {
-  Scanner sc = new Scanner(System.in);
-  System.out.print("Enter the ID of the order to update: ");
-  int orderID = sc.nextInt();
-  
+private void updateOrder() {
+        Scanner sc = new Scanner(System.in);
+        config conf = new config();
+        System.out.println("Enter Order ID to Update");
+        int orderId = sc.nextInt();
+        
+        // Check if the order exists
+        while (conf.getSingleValue("SELECT o_id FROM tbl_order WHERE o_id=?", orderId) == 0) {
+            System.out.println("SELECTED ID doesn't exist!");
+            System.out.println("Enter Order ID Again");
+            orderId = sc.nextInt();
+        }
+
+        System.out.print("Enter New Quantity: ");
+        double quantity = sc.nextDouble();
+        
+        System.out.print("Enter New Received Cash: ");
+        double rcash = sc.nextDouble();
+        
+        String qry = "UPDATE tbl_order SET o_quantity=?, o_rcash=? WHERE o_id=?";
+        conf.updateRecord(qry, quantity, rcash, orderId);
+        
+        System.out.println("Order updated successfully.");
+    }
+
+    private void deleteOrder() {
+        Scanner sc = new Scanner(System.in);
+        config conf = new config();
+        System.out.println("Enter Order ID to Delete");
+        int orderId = sc.nextInt();
+        
+        // Check if the order exists
+        while (conf.getSingleValue("SELECT o_id FROM tbl_order WHERE o_id=?", orderId) == 0) {
+            System.out.println("SELECTED ID doesn't exist!");
+            System.out.println("Enter Order ID Again");
+            orderId = sc.nextInt();
+        }
+
+        String qry = "DELETE FROM tbl_order WHERE o_id=?";
+        conf.updateRecord(qry, orderId);
+        
+        System.out.println("Order deleted successfully.");
     }
 }
-
-
-  
