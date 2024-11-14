@@ -195,4 +195,50 @@ public void deleteRecord(String sql, Object... values) {
         }
         return result;
     }
+    public void viewRecordsWithParameter(String sqlQuery, String[] columnHeaders, String[] columnNames, int customerId) {
+    if (columnHeaders.length != columnNames.length) {
+        System.out.println("Error: Mismatch between column headers and column names.");
+        return;
+    }
+
+    try (Connection conn = this.connectDB();
+         PreparedStatement pstmt = conn.prepareStatement(sqlQuery)) {
+        
+        pstmt.setInt(1, customerId); // Set customer ID parameter
+        ResultSet rs = pstmt.executeQuery();
+
+        StringBuilder headerLine = new StringBuilder();
+        headerLine.append("-----------------------------------------------------------------------------------------------------------------------------------------------------------\n| ");
+        for (String header : columnHeaders) {
+            headerLine.append(String.format("%-20s | ", header));
+        }
+        headerLine.append("\n-----------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        System.out.println(headerLine.toString());
+
+        while (rs.next()) {
+            StringBuilder row = new StringBuilder("| ");
+            for (String colName : columnNames) {
+                String value = rs.getString(colName);
+                row.append(String.format("%-20s | ", value != null ? value : ""));
+            }
+            System.out.println(row.toString());
+        }
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+    } catch (SQLException e) {
+        System.out.println("Error retrieving records: " + e.getMessage());
+    }
+}
+    public ResultSet executeQuery(String sql) {
+    ResultSet rs = null;
+    try {
+        Connection conn = this.connectDB();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
+    } catch (SQLException e) {
+        System.out.println("Error executing query: " + e.getMessage());
+    }
+    return rs;
+}
 }
