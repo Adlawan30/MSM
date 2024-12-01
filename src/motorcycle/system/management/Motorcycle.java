@@ -59,6 +59,12 @@ public class Motorcycle {
 
         System.out.print("Do you want to continue? (yes to cancel / no to go back to main menu): ");
         response = sc.next();
+        
+             while (!response.equalsIgnoreCase("yes") && !response.equalsIgnoreCase("no")) {
+        System.out.println("Invalid input. Please enter 'yes' or 'no'.");
+        response = sc.next();
+        
+ }
 
     } while (response.equalsIgnoreCase("yes"));
     

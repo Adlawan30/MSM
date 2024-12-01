@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class Reports {
    public void showReports() {
     Scanner sc = new Scanner(System.in);
+    String response = null;
     boolean continueReports = true;
 
     while (continueReports) {
@@ -42,7 +43,13 @@ public class Reports {
                 break;
             default:
                 System.out.println("Invalid selection. Please try again.");
-        }
+                
+                     while (!response.equalsIgnoreCase("yes") && !response.equalsIgnoreCase("no")) {
+        System.out.println("Invalid input. Please enter 'yes' or 'no'.");
+        response = sc.next();
+        
+ }
+        } while (response.equalsIgnoreCase("yes"));
     }
 }
 

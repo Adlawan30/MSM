@@ -39,11 +39,15 @@ public class Customer {
                 break;
 
             case 3:
+                cs.viewCustomer();
                 cs.updateCustomer();
+                cs.viewCustomer();
                 break;
 
             case 4:
+                cs.viewCustomer();
                 cs.deleteCustomer();
+                cs.viewCustomer();
                 break;
 
             case 5:
@@ -55,7 +59,12 @@ public class Customer {
 
         System.out.print("Do you want to continue? (yes to cancel / no to go back to main menu): ");
         response = sc.next();
-
+         
+        while (!response.equalsIgnoreCase("yes") && !response.equalsIgnoreCase("no")) {
+        System.out.println("Invalid input. Please enter 'yes' or 'no'.");
+        response = sc.next();
+        
+ }
     } while (response.equalsIgnoreCase("yes"));       
 }
     public void addCustomer (){
@@ -119,29 +128,25 @@ public class Customer {
     String qry = "UPDATE tbl_customer SET c_fname=?, c_lname=?, c_email=?, c_status=? WHERE c_id = ?";
     conf.updateRecord(qry, fname, lname, email, status, id);
 }
-   private void deleteCustomer() {
-    Scanner sc = new Scanner(System.in);
-    config conf = new config();
-    int id = 0;
-
-    while (true) {
+   private void deleteCustomer(){
+        
+        Scanner sc = new Scanner (System.in);
+        config conf = new config();
         System.out.print("Enter ID to delete: ");
-        if (sc.hasNextInt()) {
+        int id = sc.nextInt();
+        
+        while(conf.getSingleValue("SELECT c_id FROM tbl_customer WHERE c_id=?",id)==0){
+            System.out.println("Selected ID doesn't exist");
+            System.out.print("Selected Customer ID Again: ");
             id = sc.nextInt();
-            if (conf.getSingleValue("SELECT c_id FROM tbl_customer WHERE c_id=?", id) != 0) {
-                break; 
-            } else {
-                System.out.println("Selected ID doesn't exist! Please try again.");
-            }
-        } else {
-            System.out.println("Invalid input. Please enter a valid integer ID.");
-            sc.next(); 
+        }
+ 
+        String qry ="DELETE FROM tbl_customer WHERE c_id=?";
+ 
+        conf.deleteRecord(qry,id);  
     }
-
-    String qry = "DELETE FROM tbl_customer WHERE c_id=?";
-    conf.deleteRecord(qry, id);  
 }
             
-   }
-}
+   
+
  

@@ -54,10 +54,16 @@ public class Orders {
                 System.out.println("Invalid selection. Please try again.");
         }
 
-        System.out.print("Do you want to continue? (yes to cancel / no to go back to main menu): ");
+         System.out.println("Do you want to continue? (yes/no):");
+            response = sc.next();
+            
+                         while (!response.equalsIgnoreCase("yes") && !response.equalsIgnoreCase("no")) {
+        System.out.println("Invalid input. Please enter 'yes' or 'no'.");
         response = sc.next();
-
-    } while (response.equalsIgnoreCase("yes"));     
+        
+ }
+        
+        }while(response.equalsIgnoreCase("yes"));    
 }
 
     public void addOrder() {
@@ -87,7 +93,23 @@ public class Orders {
         }
         
         System.out.print("Enter Quantity: ");
-        double quantity = sc.nextDouble();
+        double quantity = 0; 
+
+        while (true) {
+        if (sc.hasNextDouble()) { 
+        quantity = sc.nextDouble(); 
+        if (quantity > 0) {
+            break; 
+        } else {
+            System.out.println("Invalid quantity. Please enter a valid quantity.");
+        }
+         } else {
+        System.out.println("Invalid input. Please enter a numeric value.");
+        sc.next(); 
+    }
+}
+        
+        
         
         String priceqry = "SELECT m_price FROM tbl_motorcycle WHERE m_id=?";
         double price = conf.getSingleValue(priceqry, mid);
