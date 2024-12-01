@@ -131,7 +131,7 @@ public class Orders {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         String date = currdate.format(format);
         
-        String status = "Pending";
+        String status = "Approve";
         String orderqry = "INSERT INTO tbl_order (c_id, m_id, o_quantity, o_due, o_rcash, o_date, o_status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         conf.addRecord(orderqry, cid, mid, quantity, due, rcash, date, status);
     }

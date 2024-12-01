@@ -5,53 +5,52 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Reports {
-   public void showReports() {
-    Scanner sc = new Scanner(System.in);
-    String response = null;
-    boolean continueReports = true;
+    public void showReports() {
+        Scanner sc = new Scanner(System.in); 
 
-    while (continueReports) {
-        System.out.println("            /------------------------------------------------------/");
-        System.out.println("           /                 REPORTS PANEL                        /");
-        System.out.println("          / -----------------------------------------------------/");
-        System.out.println("         /  1. VIEW CUSTOMER TRANSACTIONS                       /");
-        System.out.println("        /   2. VIEW INDIVIDUAL CUSTOMER TRANSACTION            /");
-        System.out.println("       /    3. VIEW FULL CUSTOMER TRANSACTION                 /");
-        System.out.println("      /     4. EXIT                                          /");
-        System.out.println("     /------------------------------------------------------/");
-        System.out.print("Enter Selection: ");
+        boolean continueReports = true;
 
-        while (!sc.hasNextInt()) {
-            System.out.println("Invalid input. Please enter a valid integer.");
-            sc.next(); 
+        while (continueReports) {
+            System.out.println("            /------------------------------------------------------/");
+            System.out.println("           /                 REPORTS PANEL                        /");
+            System.out.println("          / -----------------------------------------------------/");
+            System.out.println("         /  1. VIEW CUSTOMER TRANSACTIONS                       /");
+            System.out.println("        /   2. VIEW INDIVIDUAL CUSTOMER TRANSACTION            /");
+            System.out.println("       /    3. VIEW FULL CUSTOMER TRANSACTION                 /");
+            System.out.println("      /     4. EXIT                                          /");
+            System.out.println("     /------------------------------------------------------/");
+            System.out.print("Enter Selection: ");
+            
+            while (!sc.hasNextInt()) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+                sc.next(); 
+            }
+            
+            int selection = sc.nextInt(); 
+
+            switch (selection) {
+                case 1:
+                    viewCustomerTransactions();
+                    break;
+                case 2:
+                    viewIndividualCustomerTransaction();
+                    break;
+                case 3:
+                    viewFullTransactionReport();
+                    break;
+                case 4:
+                     System.out.println("Returning to Main Menu...");
+                    continueReports = false;  
+                    break;
+                default:
+                    System.out.println("Invalid selection. Please try again.");
+                    break;
+                    
+                    
+            }
         }
-        
-        int selection = sc.nextInt();
-
-        switch (selection) {
-            case 1:
-                viewCustomerTransactions();
-                break;
-            case 2:
-                viewIndividualCustomerTransaction();
-                break;
-            case 3:
-                viewFullTransactionReport();
-                break;
-            case 4:
-                continueReports = false;
-                break;
-            default:
-                System.out.println("Invalid selection. Please try again.");
-                
-                     while (!response.equalsIgnoreCase("yes") && !response.equalsIgnoreCase("no")) {
-        System.out.println("Invalid input. Please enter 'yes' or 'no'.");
-        response = sc.next();
-        
- }
-        } while (response.equalsIgnoreCase("yes"));
+        sc.close(); 
     }
-}
 
     private void viewCustomerTransactions() {
         String qry = "SELECT c.c_id, c.c_fname, c.c_lname, o.o_id, o.o_due, o.o_date " +
@@ -63,7 +62,7 @@ public class Reports {
         conf.viewRecords(qry, hrds, clms);
     }
 
-    private void viewIndividualCustomerTransaction() {
+        private void viewIndividualCustomerTransaction() {
         Scanner sc = new Scanner(System.in);
         int customerId = 0;
 
@@ -120,6 +119,12 @@ public class Reports {
             }
         } catch (SQLException e) {
             System.out.println("Error retrieving records: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close(); 
+            } catch (SQLException e) {
+                System.out.println("Error closing ResultSet: " + e.getMessage());
+            }
         }
 
         System.out.println("-----------------------------------------------------------------------------------------------------------------------------");
